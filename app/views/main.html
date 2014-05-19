@@ -1,0 +1,37 @@
+<div ng-controller="Topbar as topbar">
+Total Questions: {{questions().length}}
+</div>
+<div>
+    <li ng-repeat="question in quiz">
+        <strong>{{ question.question_text }}</strong>
+        <button ng-repeat="option in question.options">
+          {{option.answer}} <!-- is correct? {{option.is_correct }} -->
+        </button>
+    </li>
+</div>
+
+<form name="questionForm" role="form" ng-submit="main.addQuestion(questionForm.$valid)" novalidate>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Question</label>
+    <div class="col-sm-10" ng-class="{ 'has-error' : questionForm.question_text.$invalid && !questionForm.question_text.$pristine }">
+      <input name="question_text" type="text" class="form-control" ng-model="question_text" placeholder="Who is Godzilla's greatest enemy?" required ng-minlength="5">
+      <p ng-show="questionForm.question_text.$invalid && questionForm.question_text.$invalid-minlength && !questionForm.question_text.$pristine" class="alert">You need to have at least 5 characters</p>
+      <p ng-show="questionForm.question_text.$invalid && !questionForm.question_text.$pristine" class="alert">You need to have some question text</p>
+    </div>
+
+  </div>
+  <fieldset>
+    <legend>Options for the question</legend>
+    <div class="form-inline" ng-repeat="option in question_options">
+      <input type="checkbox" ng-model="option.is_correct"> Correct
+      <div class="form-group" style="margin-bottom: 10px">
+        <div class="col-md-12">
+          <input type="text" class="form-control" ng-model="option.answer" placeholder="MUTO!" required>
+        </div>
+      </div>
+      <button type="button" class="btn btn-danger" ng-click="main.deleteOption($index)">Delete</button>
+    </div>
+    <button type="button" class="btn btn-success" ng-click="main.addOption()">Add Option</button>
+  </fieldset>
+  <button type="submit" class="btn btn-success">Add Question</button>
+</form>
